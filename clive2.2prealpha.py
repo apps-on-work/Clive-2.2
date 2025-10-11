@@ -1,6 +1,7 @@
 import discord  
 from nospace import token 
-
+from discord.ext import commands
+from discord import app_commands #importing two files from discord.py to enable slash commands
 
 class Client(discord.Client):
 
@@ -32,3 +33,4 @@ intents.message_content = True
 client = Client(intents=intents)
 
 client.run(token)
+
