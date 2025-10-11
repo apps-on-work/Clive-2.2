@@ -2,9 +2,9 @@ import discord
 from nospace import token 
 from nospace import serverID 
 from discord.ext import commands
-from discord import app_commands #importing two files from discord.py to enable slash commands
+from discord import app_commands 
 
-class Client(commands.Bot): #it will be commands.Bot instead of discord.Clients to make it accept slash commands
+class Client(commands.Bot): 
 
     async def on_ready(self):
         print(f'Logged on as {self.user}!')
@@ -12,10 +12,10 @@ class Client(commands.Bot): #it will be commands.Bot instead of discord.Clients 
         try:
             guild = discord.Object(id=serverID)
             synced = await self.tree.sync(guild=guild)
-            print(f'Sync Complete\n{len(synced)} command synced to guild {guild.id}') #trying to sync slash command
+            print(f'Sync Complete\n{len(synced)} command synced to guild {guild.id}') 
 
         except Exception as e:
-            print(f'Error: {e}') #taking the error here
+            print(f'Error: {e}') 
 
 
 
@@ -27,8 +27,6 @@ class Client(commands.Bot): #it will be commands.Bot instead of discord.Clients 
        
        if message.content.startswith('^911'):
            await message.channel.send(f'https://tenor.com/view/cartoon-tom-and-jerry-on-phone-tom-fbi-gif-17292737')
-           
-       
        
        
        if message.content.startswith('^hello'):
@@ -39,7 +37,7 @@ class Client(commands.Bot): #it will be commands.Bot instead of discord.Clients 
 intents = discord.Intents.default()
 
 intents.message_content = True
-client = Client(command_prefix="^", intents=intents) #modified the previous command and added a command_prefix; for some reason we still have to include it even to run / cmds
+client = Client(command_prefix="^", intents=intents)
 
 
 GUILD_ID = discord.Object(id=serverID)
@@ -47,7 +45,13 @@ GUILD_ID = discord.Object(id=serverID)
 
 @client.tree.command(name="run", description="Slash cmds run check!", guild=GUILD_ID)
 async def run(interaction: discord.Interaction):
-    await interaction.response.send_message("Slash cmds are working fine!") #making a slash command 
+    await interaction.response.send_message("Slash cmds are working fine!") 
+
+
+
+@client.tree.command(name="nerd", description="identifies a nerd when it sees one!", guild=GUILD_ID)
+async def nerd(interaction: discord.Interaction, nerd: str):  #a branch; we can have multiple branches like (nerd: str, type: int, etc etc)
+    await interaction.response.send_message(f'\"{nerd}\" :nerd:') 
 
 
 
