@@ -30,18 +30,44 @@ class Client(commands.Bot):
        
        
        if message.content.startswith('^hello'):
-           await message.channel.send(f'hello {message.author}!')
+           await message.channel.send(f'*hello {message.author}!*')
 
 
 
     async def on_message_delete(self, message):
         print(f'{message.author} deleted \"{message.content}\"')
 
-        await message.channel.send(f'{message.author} just a message ||{message.content}||')
+        await message.channel.send(f'**{message.author}** just deleted a message : \"||{message.content}||\"')
 
+
+    async def on_member_join(self, member):
+        try:
+            print(f'{member.name} has been added to the Server')
+
+            add_send = discord.utils.get(member.guild.text_channels, name='general')
+
+
+            await add_send.send(f'**{member.name}** just landed outta nowhere. Welcome :saluting_face:')
+        
+        except Exception as e:
+            print(f'Error in member_add: {e}') 
+
+
+    async def on_member_remove(self, member):
+        try:
+            print(f'{member.name} has been removed from the Server')
+
+            remove_send = discord.utils.get(member.guild.text_channels, name='general')
+
+            await remove_send.send(f'**{member.name}** just flew away. Goodbye :saluting_face:')
+
+        except Exception as e:
+            print(f'Error in member_remove: {e}') 
 
  
 intents = discord.Intents.default()
+intents.members = True
+
 
 intents.message_content = True
 client = Client(command_prefix="^", intents=intents)
