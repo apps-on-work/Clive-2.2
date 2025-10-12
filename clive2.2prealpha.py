@@ -33,6 +33,13 @@ class Client(commands.Bot):
            await message.channel.send(f'hello {message.author}!')
 
 
+
+    async def on_message_delete(self, message):
+        print(f'{message.author} deleted \"{message.content}\"')
+
+        await message.channel.send(f'{message.author} just a message ||{message.content}||')
+
+
  
 intents = discord.Intents.default()
 
@@ -56,3 +63,11 @@ async def nerd(interaction: discord.Interaction, nerd: str):  #a branch; we can 
 
 
 client.run(token)
+
+
+
+
+
+
+
+#pending. . . . . . . . .
