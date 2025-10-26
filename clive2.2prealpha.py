@@ -2,7 +2,7 @@ import discord
 from nospace import token 
 from nospace import serverID 
 from discord.ext import commands
-from discord import app_commands 
+from discord import app_commands
 
 class Client(commands.Bot): 
 
@@ -88,6 +88,21 @@ async def nerd(interaction: discord.Interaction, nerd: str):  #a branch; we can 
 
 
 
+@client.tree.command(name="yt", description="test skelly model", guild=GUILD_ID)
+async def yt(interaction: discord.Interaction):
+    embed = discord.Embed(title="Video Name", url="https://chatgpt.com/", description="Video description", color=0xff0000)
+    embed.set_thumbnail(url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY")
+    embed.add_field(name="Likes", value="2.3M or smth idk", inline=False)
+    embed.add_field(name="Comments", value="2.3K or smth idk", inline=False)
+    embed.add_field(name="Shares", value="203 or smth idk", inline=False) #when set false, inline ensures that nothing else continues on same line except that field
+    embed.set_footer(text="Results may varry")
+    embed.set_author(name=interaction.user.name, url="https://www.youtube.com/", icon_url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY")
+    await interaction.response.send_message(embed=embed)
+
+
+
+
+
 client.run(token)
 
 
@@ -96,4 +111,4 @@ client.run(token)
 
 
 
-#pending. . . . . . . . .
+#pending. . . . . . . .
