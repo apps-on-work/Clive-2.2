@@ -2,7 +2,7 @@ import discord
 import re
 from nospace import token 
 from nospace import serverID 
-from nospace import YoutubeAPI 
+from nospace import YoutubeAPI # get an API for YT, YouTube Data API v3 (10k quota at free tier so use accordingly ;-;)
 #pip install google-api-python-client (get this)
 from googleapiclient.discovery import build
 from discord.ext import commands
@@ -138,15 +138,20 @@ def format_compact_number(num_str):
 
 
 
-@client.tree.command(name="ytsearch", description="Recommends you crisp YT vids based on your search", guild=GUILD_ID)
-async def ytsearch(interaction: discord.Interaction, ytsearch: str):
+@client.tree.command(name="ytsearch", description="Recommends you crisp YT vids based on your search. Response cap(1-3)", guild=GUILD_ID)
+async def ytsearch(interaction: discord.Interaction, ytsearch: str, response_limit: int):
+    if response_limit < 1:
+        response_limit = 1
+    elif response_limit > 3:
+        response_limit = 3
+    
     await interaction.response.defer()  # in case API takes time
 
     #Youtube API client
     youtube = build("youtube", "v3", developerKey=YoutubeAPI)
 
     # search for vids
-    request = youtube.search().list(part="snippet", q=ytsearch, type="video", maxResults=1)  # no of results, can change
+    request = youtube.search().list(part="snippet", q=ytsearch, type="video", maxResults=response_limit)  # no of results, can change
     response = request.execute()
 
     if not response['items']:
