@@ -1,8 +1,14 @@
 import discord  
+import re
 from nospace import token 
 from nospace import serverID 
+from nospace import YoutubeAPI 
+#pip install google-api-python-client (get this)
+from googleapiclient.discovery import build
 from discord.ext import commands
 from discord import app_commands
+from datetime import datetime
+
 
 class Client(commands.Bot): 
 
@@ -100,7 +106,101 @@ async def yt(interaction: discord.Interaction):
     await interaction.response.send_message(embed=embed)
 
 
+def parse_duration(duration):
+    """Convert ISO 8601 duration (e.g. PT1H2M5S) to readable format like 1:02:05"""
+    pattern = re.compile(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?')
+    match = pattern.match(duration)
+    if not match:
+        return "Unknown"
+    hours, minutes, seconds = match.groups()
+    hours = int(hours) if hours else 0
+    minutes = int(minutes) if minutes else 0
+    seconds = int(seconds) if seconds else 0
+    if hours:
+        return f"{hours}:{minutes:02d}:{seconds:02d}"
+    else:
+        return f"{minutes}:{seconds:02d}"
 
+def format_compact_number(num_str):
+    """Convert large numbers into compact formats (e.g., 1500 -> 1.5K, 1200000 -> 1.2M)"""
+    try:
+        num = int(num_str)
+    except (ValueError, TypeError):
+        return "No info"
+
+    if num >= 1_000_000_000:
+        return f"{num/1_000_000_000:.1f}B".rstrip("0").rstrip(".")
+    elif num >= 1_000_000:
+        return f"{num/1_000_000:.1f}M".rstrip("0").rstrip(".")
+    elif num >= 1_000:
+        return f"{num/1_000:.1f}K".rstrip("0").rstrip(".")
+    return str(num)
+
+
+
+@client.tree.command(name="ytsearch", description="Recommends you crisp YT vids based on your search", guild=GUILD_ID)
+async def ytsearch(interaction: discord.Interaction, ytsearch: str):
+    await interaction.response.defer()  # in case API takes time
+
+    #Youtube API client
+    youtube = build("youtube", "v3", developerKey=YoutubeAPI)
+
+    # search for vids
+    request = youtube.search().list(part="snippet", q=ytsearch, type="video", maxResults=1)  # no of results, can change
+    response = request.execute()
+
+    if not response['items']:
+        await interaction.followup.send("No results found.")
+        return
+
+    embeds = []
+    for video in response['items']:
+        video_id = video['id']['videoId']
+        snippet = video['snippet']
+
+        title = snippet['title']
+        url = f"https://www.youtube.com/watch?v={video_id}"
+        channelname = snippet['channelTitle']
+        thumbnail = snippet['thumbnails']['high']['url']
+        published_at = snippet.get('publishedAt', 'No info')
+        description = snippet.get('description', 'No info')
+        channel_id = snippet["channelId"]
+        channel_request = youtube.channels().list(part="snippet", id=channel_id)
+        channel_response = channel_request.execute()
+        channel_info = channel_response["items"][0]["snippet"]
+        channelurl = f"https://www.youtube.com/channel/{channel_id}"
+        channelthumbnail = channel_info['thumbnails']['high']['url']
+
+        try:
+            dt = datetime.strptime(published_at, "%Y-%m-%dT%H:%M:%SZ")
+            published_date = dt.strftime("%Y-%m-%d")
+            published_time = dt.strftime("%H:%M:%S")
+        except Exception:
+            published_date = published_at
+            published_time = "No Info"
+
+        #for more info like views, likes, duration, we need to call another API
+        stats_request = youtube.videos().list(part="statistics,contentDetails", id=video_id)
+        
+        stats_response = stats_request.execute()
+        stats = stats_response['items'][0]['statistics']
+        details = stats_response['items'][0]['contentDetails']
+
+        views = format_compact_number(stats.get('viewCount', 'No info'))
+        likes = format_compact_number(stats.get('likeCount', 'No info'))
+        duration = parse_duration(details.get('duration', 'No info'))  # ISO 8601 format changed
+
+        embed = discord.Embed(title=title, url=url, description=description, color=0xFF0000)
+
+        embed.set_thumbnail(url=thumbnail)
+        embed.add_field(name="Views", value=f'{views}', inline=False)
+        embed.add_field(name="Likes", value=f'{likes}', inline=False)
+        embed.add_field(name="Duration", value=f'{duration}', inline=False)
+        embed.add_field(name="Published", value=f'Date: {published_date}\nTime: {published_time}', inline=False)
+        embed.set_footer(text="Clive 2.2\nAll rights reserved!") #not the search youtube python lib >:(
+        embed.set_author(name=channelname, url=channelurl, icon_url=channelthumbnail)
+
+        await interaction.followup.send(embed=embed)
 
 
 client.run(token)
