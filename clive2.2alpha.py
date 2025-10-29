@@ -107,11 +107,10 @@ async def yt(interaction: discord.Interaction):
 
 
 def parse_duration(duration):
-    """Convert ISO 8601 duration (e.g. PT1H2M5S) to readable format like 1:02:05"""
     pattern = re.compile(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?')
     match = pattern.match(duration)
     if not match:
-        return "Unknown"
+        return "No info"
     hours, minutes, seconds = match.groups()
     hours = int(hours) if hours else 0
     minutes = int(minutes) if minutes else 0
@@ -122,7 +121,6 @@ def parse_duration(duration):
         return f"{minutes}:{seconds:02d}"
 
 def format_compact_number(num_str):
-    """Convert large numbers into compact formats (e.g., 1500 -> 1.5K, 1200000 -> 1.2M)"""
     try:
         num = int(num_str)
     except (ValueError, TypeError):
@@ -209,10 +207,6 @@ async def ytsearch(interaction: discord.Interaction, ytsearch: str, response_lim
 
 
 client.run(token)
-
-
-
-
 
 
 
