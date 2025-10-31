@@ -1,6 +1,6 @@
 import discord  
 import re
-import request
+import aiohttp
 from nospace import token 
 from nospace import serverID 
 from nospace import YoutubeAPI # get an API for YT, YouTube Data API v3 (10k quota at free tier so use accordingly ;-;)
@@ -104,6 +104,41 @@ async def ud(interaction: discord.Interaction, ud: str):
     embed.set_author(name=interaction.user.name, url="https://www.youtube.com/", icon_url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY") #no url and icon=pfp
     await interaction.response.send_message(embed=embed)
 
+@client.tree.command(name="udsearch", description="Look for answers in Urban Dictionary", guild=GUILD_ID)
+async def udsearch(interaction: discord.Interaction, udsearch: str):
+
+    await interaction.response.defer()
+
+    url = (f"https://api.urbandictionary.com/v0/define?term={udsearch}")
+
+    async with aiohttp.ClientSession() as session:
+        try:
+            async with session.get(url) as response:
+                data = await response.json(content_type=None)
+
+        except aiohttp.ContentTypeError: #JSON file error check cuz the other method wasn't working
+            await interaction.followup.send("Urban Dictionary is currently not responding.")
+            return
+
+    if not data["list"]:
+        await interaction.followup.send('No info')
+        return
+
+    entry = data["list"][0]
+    definition = entry["definition"]
+    title = entry["word"]
+    example = entry["example"]
+
+    if len(definition) > 1000:
+        definition = definition[:822] + "-"
+
+    embed = discord.Embed(title=f'**{title}**', color=0x0eed4e)
+    embed.add_field(name="Definition:", value=f'\"*{definition}*\"', inline=False)
+    embed.add_field(name="Example:", value=f'\"*{example}*\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
+    embed.set_footer(text="This is satire\n© Urban Dictionary")
+    embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url)
+    await interaction.followup.send(embed=embed)
+
 
 def parse_duration(duration):
     pattern = re.compile(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?')
@@ -192,7 +227,7 @@ async def ytsearch(interaction: discord.Interaction, ytsearch: str, response_lim
         likes = format_compact_number(stats.get('likeCount', 'No info'))
         duration = parse_duration(details.get('duration', 'No info'))  # ISO 8601 format changed
 
-        embed = discord.Embed(title=title, url=url, description=description, color=0xFF0000)
+        embed = discord.Embed(title=title, url=url, description=description, color=0xff0000)
 
         embed.set_thumbnail(url=thumbnail)
         embed.add_field(name="Views", value=f'{views}', inline=False)
@@ -209,6 +244,5 @@ client.run(token)
 
 
 
+
 #pending. . . . . . . .
-
-
