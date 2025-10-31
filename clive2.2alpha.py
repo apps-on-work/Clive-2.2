@@ -95,15 +95,13 @@ async def nerd(interaction: discord.Interaction, nerd: str):  #a branch; we can 
 
 
 
-@client.tree.command(name="yt", description="test skelly model", guild=GUILD_ID)
-async def yt(interaction: discord.Interaction):
-    embed = discord.Embed(title="Video Name", url="https://chatgpt.com/", description="Video description", color=0xff0000)
-    embed.set_thumbnail(url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY")
-    embed.add_field(name="Likes", value="2.3M or smth idk", inline=False)
-    embed.add_field(name="Comments", value="2.3K or smth idk", inline=False)
-    embed.add_field(name="Shares", value="203 or smth idk", inline=False) #when set false, inline ensures that nothing else continues on same line except that field
-    embed.set_footer(text="Results may varry")
-    embed.set_author(name=interaction.user.name, url="https://www.youtube.com/", icon_url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY")
+@client.tree.command(name="ud", description="Urban Dictionary test skelly model", guild=GUILD_ID)
+async def ud(interaction: discord.Interaction, ud: str):
+    embed = discord.Embed(title="What was searched", url="https://chatgpt.com/", description="dictionary content", color=0x0eed4e) #no url
+    embed.set_thumbnail(url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY") #remove
+    embed.add_field(name="Search results for:", value=f'\"{ud}\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
+    embed.set_footer(text="This is satire\n© Urban Dictionary") #no offense and give ud credit
+    embed.set_author(name=interaction.user.name, url="https://www.youtube.com/", icon_url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY") #no url and icon=pfp
     await interaction.response.send_message(embed=embed)
 
 
@@ -212,4 +210,5 @@ client.run(token)
 
 
 #pending. . . . . . . .
+
 
