@@ -95,22 +95,28 @@ async def nerd(interaction: discord.Interaction, nerd: str):  #a branch; we can 
 
 
 
-@client.tree.command(name="button", description="Would you press the button test skelly model", guild=GUILD_ID)
-async def button(interaction: discord.Interaction, button: str):
+@client.tree.command(name="wyr", description="Would you press the button test skelly model", guild=GUILD_ID)
+async def wyr(interaction: discord.Interaction, wyr: str):
 
     await interaction.response.defer()
 
     embed = discord.Embed(title="What was searched", url="https://chatgpt.com/", description="dictionary content", color=0xE027F5) #no url
     embed.set_thumbnail(url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY") #remove
-    embed.add_field(name="Will you Press the Button", value=f'\"{button}\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
+    embed.add_field(name="Will you Press the Button", value=f'\"{wyr}\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
     embed.set_footer(text="This is satire\n© willyoupressthebutton.com")
     embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url, url="https://ww.youtube.com/")
     await interaction.followup.send(embed=embed)
 
 class View (discord.ui.View):
-    @discord.ui.button(label="click", style=0x09EDDF, emoji="🤝")
+    @discord.ui.button(label="click", style=discord.ButtonStyle.blurple, emoji="🤝")
     async def button_callback(self, button, interaction):
-        await button.response.send("button clicked!") #add a giveout
+        await button.response.send_message("button clicked!") #add a giveout
+
+
+    @discord.ui.button(label="click", style=discord.ButtonStyle.blurple, emoji="🤝")
+    async def copy_button_callback(self, button, interaction):
+        await button.response.send_message("button clicked!") #add a giveout
+
 
 
 @client.tree.command(name="button", description="Would you press the button test skelly model", guild=GUILD_ID)
