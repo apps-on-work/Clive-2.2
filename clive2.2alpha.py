@@ -107,16 +107,23 @@ async def wyr(interaction: discord.Interaction, wyr: str):
     embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url, url="https://ww.youtube.com/")
     await interaction.followup.send(embed=embed)
 
+
+
+
 class View (discord.ui.View):
     @discord.ui.button(label="Press", style=discord.ButtonStyle.green, emoji="🕹️")
     async def button_callback(self, button, interaction):
-        await button.response.send("gives out statictics of people who choose what option __% people choose this option message") #add a giveout
+        await button.response.send(f'***{interaction.user.name} choose to press the button***') #add a giveout
 
 
     @discord.ui.button(label="I Will not", style=discord.ButtonStyle.red, emoji="❌")
     async def copy_button_callback(self, button, interaction):
-        await button.response.send("gives out statictics of people who choose what option __% people choose this option message") #add a giveout
+        await button.response.sendf(f'***{interaction.user.name} choose not to press the button***') #add a giveout
 
+
+    @discord.ui.button(label="Next Question", style=discord.ButtonStyle.blurple)
+    async def recopy_button_callback(self, button, interaction):
+        await button.response.send("")  #add a giveout
 
 
 @client.tree.command(name="Will you?", description="A Fun Will you Press the Button game to enjoy!", guild=GUILD_ID)
@@ -129,7 +136,7 @@ async def Will_you(interaction: discord.Interaction):
     embed.add_field(name="But", value=f'txt2', inline=False)
     embed.set_footer(text="This is satire\n© willyoupressthebutton.com")
     embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url, url="https://ww.youtube.com/")
-    await interaction.followup.send(view=View())
+    await interaction.followup.send(embed=embed, view=View())
 
 
 
