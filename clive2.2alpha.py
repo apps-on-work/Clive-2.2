@@ -109,34 +109,45 @@ async def wyr(interaction: discord.Interaction, wyr: str):
 
 
 
+async def get_question():
+    url = "https://willyoupressthebutton.com/"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            html = await response.text()
+
+    txt1m = re.search(r'<div id="sentence">(.*?)</div>', html)
+    txt2m = re.search(r'<div id="cond">(.*?)</div>', html)
+
+    txt1 = re.sub(r"<.*?>", "", txt1m.group(1)).strip() if txt1m else "No Info"
+    txt2 = re.sub(r"<.*?>", "", txt2m.group(1)).strip() if txt2m else "No Info"
+
+    return txt1, txt2
 
 class View (discord.ui.View):
     @discord.ui.button(label="Press", style=discord.ButtonStyle.green, emoji="🕹️")
     async def button_callback(self, button, interaction):
-        await button.response.send(f'***{interaction.user.name} choose to press the button***') #add a giveout
+        await button.response.send_message(f'***{interaction.user.name} choose to press the button***') #add a giveout
+        # await button.response.send(f'***{interaction.user.name} choose to press the button***', ephemeral=True) only visible to the user
 
 
     @discord.ui.button(label="I Will not", style=discord.ButtonStyle.red, emoji="❌")
     async def copy_button_callback(self, button, interaction):
-        await button.response.sendf(f'***{interaction.user.name} choose not to press the button***') #add a giveout
+        await button.response.send_message(f'***{interaction.user.name} choose not to press the button***') #add a giveout
 
 
-    @discord.ui.button(label="Next Question", style=discord.ButtonStyle.blurple)
-    async def recopy_button_callback(self, button, interaction):
-        await button.response.send("")  #add a giveout
-
-
-@client.tree.command(name="Will you?", description="A Fun Will you Press the Button game to enjoy!", guild=GUILD_ID)
-async def Will_you(interaction: discord.Interaction):
+@client.tree.command(name="wyptb", description="A Fun Will you Press the Button game to enjoy!", guild=GUILD_ID)
+async def wyptb(interaction: discord.Interaction):
 
     await interaction.response.defer()
 
+    txt1, txt2 = await get_question()
+
     embed = discord.Embed(color=0x6809ED)
-    embed.add_field(name="Statement", value=f'txt1', inline=False)
-    embed.add_field(name="But", value=f'txt2', inline=False)
+    embed.add_field(name="Statement", value=f'{txt1}', inline=False)
+    embed.add_field(name="But", value=f'{txt2}', inline=False)
     embed.set_footer(text="This is satire\n© willyoupressthebutton.com")
-    embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url, url="https://ww.youtube.com/")
-    await interaction.followup.send(embed=embed, view=View())
+    embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url)
+    await interaction.followup.send(embed=embed, view=View()) 
 
 
 
