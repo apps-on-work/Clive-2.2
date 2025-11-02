@@ -95,33 +95,27 @@ async def nerd(interaction: discord.Interaction, nerd: str):  #a branch; we can 
 
 
 
-@client.tree.command(name="wyptb", description="Would you press the button test skelly model", guild=GUILD_ID)
-async def wyptb(interaction: discord.Interaction, wyptb: str):
-    embed = discord.Embed(title="What was searched", url="https://chatgpt.com/", description="dictionary content", color=0x0eed4e) #no url
-    embed.set_thumbnail(url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY") #remove
-    embed.add_field(name="Search results for:", value=f'\"{wyptb}\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
-    embed.set_footer(text="This is satire\n© Urban Dictionary") #no offense and give ud credit
-    embed.set_author(name=interaction.user.name, url="https://www.youtube.com/", icon_url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY") #no url and icon=pfp
-    await interaction.response.send_message(embed=embed)
-
-
 @client.tree.command(name="button", description="Would you press the button test skelly model", guild=GUILD_ID)
-async def button(interaction: discord.Interaction):
+async def button(interaction: discord.Interaction, button: str):
 
     await interaction.response.defer()
 
-
-
-
     embed = discord.Embed(title="What was searched", url="https://chatgpt.com/", description="dictionary content", color=0xE027F5) #no url
-    embed.add_field(name="Will you Press the Button", value=f'\"{wyptb}\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
+    embed.set_thumbnail(url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY") #remove
+    embed.add_field(name="Will you Press the Button", value=f'\"{button}\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
     embed.set_footer(text="This is satire\n© willyoupressthebutton.com")
-    embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url)
-    await interaction.response.send_message(embed=embed)
+    embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url, url="https://ww.youtube.com/")
+    await interaction.followup.send(embed=embed)
+
+class View (discord.ui.View):
+    @discord.ui.button(label="click", style=0x09EDDF, emoji="🤝")
+    async def button_callback(self, button, interaction):
+        await button.response.send("button clicked!") #add a giveout
 
 
-
-
+@client.tree.command(name="button", description="Would you press the button test skelly model", guild=GUILD_ID)
+async def mybutton(interaction: discord.Interaction):
+    await interaction.response.send_message(view=View)
 
 
 
