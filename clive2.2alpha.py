@@ -115,7 +115,7 @@ class View (discord.ui.View):
 
 @client.tree.command(name="button", description="Would you press the button test skelly model", guild=GUILD_ID)
 async def mybutton(interaction: discord.Interaction):
-    await interaction.response.send_message(view=View)
+    await interaction.response.send_message(view=View())
 
 
 
