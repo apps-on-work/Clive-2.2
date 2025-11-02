@@ -95,33 +95,18 @@ async def nerd(interaction: discord.Interaction, nerd: str):  #a branch; we can 
 
 
 
-@client.tree.command(name="wyr", description="Would you press the button test skelly model", guild=GUILD_ID)
-async def wyr(interaction: discord.Interaction, wyr: str):
+@client.tree.command(name="yro", description="skelly model", guild=GUILD_ID)
+async def yro(interaction: discord.Interaction, yro: str):
 
     await interaction.response.defer()
 
     embed = discord.Embed(title="What was searched", url="https://chatgpt.com/", description="dictionary content", color=0xE027F5) #no url
     embed.set_thumbnail(url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY") #remove
-    embed.add_field(name="Will you Press the Button", value=f'\"{wyr}\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
+    embed.add_field(name="Will you Press the Button", value=f'\"{yro}\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
     embed.set_footer(text="This is satire\n© willyoupressthebutton.com")
     embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url, url="https://ww.youtube.com/")
     await interaction.followup.send(embed=embed)
 
-
-
-async def get_question():
-    url = "https://willyoupressthebutton.com/"
-    async with aiohttp.ClientSession() as session:
-        async with session.get(url) as response:
-            html = await response.text()
-
-    txt1m = re.search(r'<div id="sentence">(.*?)</div>', html)
-    txt2m = re.search(r'<div id="cond">(.*?)</div>', html)
-
-    txt1 = re.sub(r"<.*?>", "", txt1m.group(1)).strip() if txt1m else "No Info"
-    txt2 = re.sub(r"<.*?>", "", txt2m.group(1)).strip() if txt2m else "No Info"
-
-    return txt1, txt2
 
 class View (discord.ui.View):
     @discord.ui.button(label="Press", style=discord.ButtonStyle.green, emoji="🕹️")
@@ -140,11 +125,11 @@ async def wyptb(interaction: discord.Interaction):
 
     await interaction.response.defer()
 
-    txt1, txt2 = await get_question()
+
 
     embed = discord.Embed(color=0x6809ED)
-    embed.add_field(name="Statement", value=f'{txt1}', inline=False)
-    embed.add_field(name="But", value=f'{txt2}', inline=False)
+    embed.add_field(name="Statement", value=f'', inline=False)
+    embed.add_field(name="But", value=f'', inline=False)
     embed.set_footer(text="This is satire\n© willyoupressthebutton.com")
     embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url)
     await interaction.followup.send(embed=embed, view=View()) 
