@@ -108,6 +108,15 @@ async def yro(interaction: discord.Interaction, yro: str):
     await interaction.followup.send(embed=embed)
 
 
+
+
+
+
+    #--------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
 class View (discord.ui.View):
     @discord.ui.button(label="Press", style=discord.ButtonStyle.green, emoji="🕹️")
     async def button_callback(self, button, interaction):
@@ -133,6 +142,12 @@ async def wyptb(interaction: discord.Interaction):
     embed.set_footer(text="This is satire\n© willyoupressthebutton.com")
     embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url)
     await interaction.followup.send(embed=embed, view=View()) 
+
+
+
+
+
+    #--------------------------------------------------------------------------------------------------------------------------------------------
 
 
 

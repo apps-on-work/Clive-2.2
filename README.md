@@ -7,4 +7,4 @@ And Urban Dictionary (for now)
 
 
 # Future Plans
-music play in VC 'n will you press the button
+music play in VC
