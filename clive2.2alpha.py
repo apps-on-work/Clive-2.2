@@ -108,20 +108,28 @@ async def wyr(interaction: discord.Interaction, wyr: str):
     await interaction.followup.send(embed=embed)
 
 class View (discord.ui.View):
-    @discord.ui.button(label="click", style=discord.ButtonStyle.blurple, emoji="🤝")
+    @discord.ui.button(label="Press", style=discord.ButtonStyle.green, emoji="🕹️")
     async def button_callback(self, button, interaction):
-        await button.response.send_message("button clicked!") #add a giveout
+        await button.response.send("gives out statictics of people who choose what option __% people choose this option message") #add a giveout
 
 
-    @discord.ui.button(label="click", style=discord.ButtonStyle.blurple, emoji="🤝")
+    @discord.ui.button(label="I Will not", style=discord.ButtonStyle.red, emoji="❌")
     async def copy_button_callback(self, button, interaction):
-        await button.response.send_message("button clicked!") #add a giveout
+        await button.response.send("gives out statictics of people who choose what option __% people choose this option message") #add a giveout
 
 
 
-@client.tree.command(name="button", description="Would you press the button test skelly model", guild=GUILD_ID)
-async def mybutton(interaction: discord.Interaction):
-    await interaction.response.send_message(view=View())
+@client.tree.command(name="Will you?", description="A Fun Will you Press the Button game to enjoy!", guild=GUILD_ID)
+async def Will_you(interaction: discord.Interaction):
+
+    await interaction.response.defer()
+
+    embed = discord.Embed(color=0x6809ED)
+    embed.add_field(name="Statement", value=f'txt1', inline=False)
+    embed.add_field(name="But", value=f'txt2', inline=False)
+    embed.set_footer(text="This is satire\n© willyoupressthebutton.com")
+    embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url, url="https://ww.youtube.com/")
+    await interaction.followup.send(view=View())
 
 
 
