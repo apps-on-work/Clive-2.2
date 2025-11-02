@@ -95,14 +95,36 @@ async def nerd(interaction: discord.Interaction, nerd: str):  #a branch; we can 
 
 
 
-@client.tree.command(name="ud", description="Urban Dictionary test skelly model", guild=GUILD_ID)
-async def ud(interaction: discord.Interaction, ud: str):
+@client.tree.command(name="wyptb", description="Would you press the button test skelly model", guild=GUILD_ID)
+async def wyptb(interaction: discord.Interaction, wyptb: str):
     embed = discord.Embed(title="What was searched", url="https://chatgpt.com/", description="dictionary content", color=0x0eed4e) #no url
     embed.set_thumbnail(url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY") #remove
-    embed.add_field(name="Search results for:", value=f'\"{ud}\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
+    embed.add_field(name="Search results for:", value=f'\"{wyptb}\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
     embed.set_footer(text="This is satire\n© Urban Dictionary") #no offense and give ud credit
     embed.set_author(name=interaction.user.name, url="https://www.youtube.com/", icon_url="https://play-lh.googleusercontent.com/6am0i3walYwNLc08QOOhRJttQENNGkhlKajXSERf3JnPVRQczIyxw2w3DxeMRTOSdsY") #no url and icon=pfp
     await interaction.response.send_message(embed=embed)
+
+
+@client.tree.command(name="button", description="Would you press the button test skelly model", guild=GUILD_ID)
+async def button(interaction: discord.Interaction):
+
+    await interaction.response.defer()
+
+
+
+
+    embed = discord.Embed(title="What was searched", url="https://chatgpt.com/", description="dictionary content", color=0xE027F5) #no url
+    embed.add_field(name="Will you Press the Button", value=f'\"{wyptb}\"', inline=False) #when set false, inline ensures that nothing else continues on same line except that field
+    embed.set_footer(text="This is satire\n© willyoupressthebutton.com")
+    embed.set_author(name=interaction.user.name, icon_url=interaction.user.display_avatar.url)
+    await interaction.response.send_message(embed=embed)
+
+
+
+
+
+
+
 
 @client.tree.command(name="udsearch", description="Look for answers in Urban Dictionary", guild=GUILD_ID)
 async def udsearch(interaction: discord.Interaction, udsearch: str):
